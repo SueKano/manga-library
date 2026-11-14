@@ -32,7 +32,7 @@ foto de portada → exportar.
 src/
   db/           esquema Dexie (MIGRATIONS), tipos y repositorio
   stores/       Pinia: estado en memoria + derivados
-  composables/  useBackup, useStoragePersistence, useInstallPrompt, useToast
+  composables/  useBackup, useStoragePersistence, useInstallPrompt, useTheme, useToast
   components/   tarjeta, portada lazy, diálogos, navegación, aviso de actualización
   views/        SeriesList, SeriesDetail, SeriesForm, Shopping, Settings
   utils/        collection (huecos/siguiente), text, image, backup

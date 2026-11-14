@@ -3,11 +3,13 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import { router } from './router'
 import { initInstallPrompt } from './composables/useInstallPrompt'
+import { initTheme } from './composables/useTheme'
 import { useCollectionStore } from './stores/collection'
 import './style.css'
 
 // Before mounting: `beforeinstallprompt` can fire very early.
 initInstallPrompt()
+initTheme()
 
 const app = createApp(App)
 app.use(createPinia())

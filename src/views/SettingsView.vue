@@ -4,6 +4,7 @@ import ImportBackup from '@/components/ImportBackup.vue'
 import { useBackup } from '@/composables/useBackup'
 import { useInstallPrompt } from '@/composables/useInstallPrompt'
 import { useStoragePersistence } from '@/composables/useStoragePersistence'
+import { THEMES, useTheme, type Theme } from '@/composables/useTheme'
 import { useToast } from '@/composables/useToast'
 import { db } from '@/db/schema'
 import { useCollectionStore } from '@/stores/collection'
@@ -52,6 +53,9 @@ async function onInstall() {
   if (await install()) show('App instalada')
 }
 
+const { theme, setTheme } = useTheme()
+const THEME_LABELS: Record<Theme, string> = { auto: 'Automático', light: 'Claro', dark: 'Oscuro' }
+
 const appVersion = __APP_VERSION__
 </script>
 
@@ -61,6 +65,17 @@ const appVersion = __APP_VERSION__
   </header>
 
   <div class="flex flex-col gap-3 px-3 pb-6">
+    <section class="card p-4" aria-labelledby="settings-theme">
+      <h2 id="settings-theme" class="text-lg font-bold">Apariencia</h2>
+      <div class="mt-3 flex gap-2" role="group" aria-label="Tema">
+        <button v-for="option in THEMES" :key="option" class="flex-1 px-2" :class="theme === option ? 'btn-primary' : 'btn-secondary'"
+                :aria-pressed="theme === option" @click="setTheme(option)">
+          {{ THEME_LABELS[option] }}
+        </button>
+      </div>
+      <p v-if="theme === 'auto'" class="mt-2 text-sm text-muted">Sigue el modo claro u oscuro del móvil.</p>
+    </section>
+
     <section class="card p-4" aria-labelledby="settings-backup">
       <h2 id="settings-backup" class="text-lg font-bold">Copia de seguridad</h2>
       <p class="mt-1" :class="store.showBackupReminder ? 'font-semibold text-warn' : 'text-muted'">

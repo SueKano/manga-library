@@ -3,39 +3,34 @@
 @theme {
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  --color-bg: #f6f6f8;
-  --color-surface: #ffffff;
-  --color-surface-2: #ececf1;
-  --color-line: #dcdce4;
-  --color-ink: #17171c;
-  --color-muted: #5d5d6b;
+  /* light-dark() picks a value from the `color-scheme` set on <html> below. */
+  --color-bg: light-dark(#f6f6f8, #0f0f12);
+  --color-surface: light-dark(#ffffff, #1a1a20);
+  --color-surface-2: light-dark(#ececf1, #26262e);
+  --color-line: light-dark(#dcdce4, #34343f);
+  --color-ink: light-dark(#17171c, #f2f2f5);
+  --color-muted: light-dark(#5d5d6b, #a3a3b2);
   /* accent: button backgrounds (white text on top); accent-text: text on the app background */
   --color-accent: #e11d48;
-  --color-accent-text: #be123c;
-  --color-accent-soft: #ffe4e9;
-  --color-warn: #92400e;
-  --color-warn-soft: #fef3c7;
-  --color-ok: #15803d;
+  --color-accent-text: light-dark(#be123c, #fb7185);
+  --color-accent-soft: light-dark(#ffe4e9, #3b1420);
+  --color-warn: light-dark(#92400e, #fcd34d);
+  --color-warn-soft: light-dark(#fef3c7, #3a2a08);
+  --color-ok: light-dark(#15803d, #4ade80);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #0f0f12;
-    --color-surface: #1a1a20;
-    --color-surface-2: #26262e;
-    --color-line: #34343f;
-    --color-ink: #f2f2f5;
-    --color-muted: #a3a3b2;
-    --color-accent-text: #fb7185;
-    --color-accent-soft: #3b1420;
-    --color-warn: #fcd34d;
-    --color-warn-soft: #3a2a08;
-    --color-ok: #4ade80;
-  }
+/* Theme: follows the system unless Settings forces one (see useTheme). */
+html {
+  color-scheme: light dark;
+}
+html[data-theme='light'] {
+  color-scheme: light;
+}
+html[data-theme='dark'] {
+  color-scheme: dark;
 }
 
 html {
-  color-scheme: light dark;
   /* Keep focused elements clear of the sticky header and the bottom bar. */
   scroll-padding: 4.5rem 0 calc(5rem + env(safe-area-inset-bottom));
   -webkit-tap-highlight-color: transparent;
