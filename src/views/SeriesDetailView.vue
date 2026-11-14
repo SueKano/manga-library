@@ -134,7 +134,7 @@ async function confirmMarkUpTo() {
 
     <div class="mx-4 mt-4 rounded-2xl bg-accent-soft p-4" aria-live="polite">
       <p class="text-lg leading-snug font-bold" :class="summary.complete ? 'text-ok' : 'text-accent-text'">
-        {{ statusPhrase(summary) }}
+        {{ statusPhrase(summary, series.status === 'completed') }}
       </p>
       <p v-if="summary.gaps.length" class="mt-1 flex items-start gap-1.5 font-semibold text-warn">
         <AppIcon name="warning" :size="20" class="mt-0.5 shrink-0" />

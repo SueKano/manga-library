@@ -7,6 +7,7 @@ import CoverImage from '@/components/CoverImage.vue'
 import { useToast } from '@/composables/useToast'
 import { STATUSES, type PublicationStatus } from '@/db/types'
 import { useCollectionStore } from '@/stores/collection'
+import { lastPurchase } from '@/utils/collection'
 import { processCover } from '@/utils/image'
 import { formatBytes } from '@/utils/text'
 
@@ -37,6 +38,20 @@ const ownedUpTo = ref<number | null | ''>(null)
 const saving = ref(false)
 const submitted = ref(false)
 const titleValid = computed(() => form.title.trim().length > 0)
+
+/** Edit only, informative: "Último tomo comprado: … · Siguiente: N". Empty when there is nothing to say. */
+const purchaseInfo = computed(() => {
+  if (editId == null) return ''
+  const purchase = lastPurchase(store.volumes.filter((volume) => volume.seriesId === editId))
+  const next = store.summaryOf(editId).next
+  const parts: string[] = []
+  if (purchase) {
+    const date = new Date(`${purchase.date}T00:00`).toLocaleDateString('es', { dateStyle: 'long' })
+    parts.push(`Último tomo comprado: el ${purchase.number}, el ${date}`)
+  }
+  if (next != null) parts.push(`Siguiente: ${next}`)
+  return parts.join(' · ')
+})
 
 // The cover is not written to the database until "Guardar" is tapped.
 
@@ -141,6 +156,8 @@ async function deleteSeries() {
     </header>
 
     <div class="flex flex-col gap-4 px-4 pt-2">
+      <p v-if="purchaseInfo" class="rounded-xl bg-surface-2 px-3 py-2 text-sm text-muted">{{ purchaseInfo }}</p>
+
       <div class="flex items-center gap-4">
         <CoverImage :series-id="coverRemoved ? undefined : (editId ?? undefined)" :title="form.title || '?'" :preview="previewUrl" class="w-24 shrink-0 text-xl"/>
         <div class="flex min-w-0 flex-1 flex-col gap-2">

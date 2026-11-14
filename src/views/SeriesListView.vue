@@ -2,13 +2,16 @@
 import AppIcon from '@/components/AppIcon.vue'
 import ImportBackup from '@/components/ImportBackup.vue'
 import SeriesCard from '@/components/SeriesCard.vue'
-import { useCollectionStore } from '@/stores/collection'
+import { SORT_ORDERS, useCollectionStore, type SortOrder } from '@/stores/collection'
 
 const store = useCollectionStore()
 const logoUrl = `${import.meta.env.BASE_URL}logo.svg`
 
-function toggleSortOrder() {
-  void store.setSortOrder(store.sortOrder === 'alphabetical' ? 'recent' : 'alphabetical')
+const SORT_LABELS: Record<SortOrder, string> = { alphabetical: 'A-Z', recent: 'Recientes', behind: 'Atrasadas' }
+
+function nextSortOrder() {
+  const nextIndex = (SORT_ORDERS.indexOf(store.sortOrder) + 1) % SORT_ORDERS.length
+  void store.setSortOrder(SORT_ORDERS[nextIndex])
 }
 </script>
 
@@ -53,9 +56,9 @@ function toggleSortOrder() {
       </div>
 
       <div class="mt-1 flex items-center justify-between">
-        <button class="btn-ghost -ml-1 px-2 text-sm text-muted" @click="toggleSortOrder">
+        <button class="btn-ghost -ml-1 px-2 text-sm text-muted" @click="nextSortOrder">
           <AppIcon name="sort" :size="18" />
-          {{ store.sortOrder === 'alphabetical' ? 'A-Z' : 'Recientes' }}
+          {{ SORT_LABELS[store.sortOrder] }}
           <span class="sr-only">(cambiar orden)</span>
         </button>
         <span class="text-sm text-muted" aria-live="polite">

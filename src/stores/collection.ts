@@ -5,7 +5,8 @@ import type { Series, SeriesInput, Volume } from '@/db/types'
 import { computeSummary, type Summary } from '@/utils/collection'
 import { matches, normalize } from '@/utils/text'
 
-export type SortOrder = 'alphabetical' | 'recent'
+export const SORT_ORDERS = ['alphabetical', 'recent', 'behind'] as const
+export type SortOrder = (typeof SORT_ORDERS)[number]
 
 const META_LAST_EXPORT = 'lastExportAt'
 const META_REMINDER_SNOOZED = 'backupReminderSnoozedUntil'
@@ -69,9 +70,13 @@ export const useCollectionStore = defineStore('collection', () => {
           (!favoritesOnly.value || seriesItem.favorite) &&
           matches(searchIndex.value.get(seriesItem.id) ?? '', query.value),
       )
-      .sort((first, second) =>
-        sortOrder.value === 'recent' ? second.updatedAt - first.updatedAt : collator.compare(first.title, second.title),
-      ),
+      .sort((first, second) => {
+        const byTitle = collator.compare(first.title, second.title)
+        if (sortOrder.value === 'recent') return second.updatedAt - first.updatedAt
+        // Most volumes left to buy first; ties fall back to the title.
+        if (sortOrder.value === 'behind') return summaryOf(second.id).missing - summaryOf(first.id).missing || byTitle
+        return byTitle
+      }),
   )
 
   const ownedVolumeCount = computed(() => volumes.value.filter((volume) => volume.owned).length)
@@ -112,7 +117,7 @@ export const useCollectionStore = defineStore('collection', () => {
       coverVersions.value = Object.fromEntries(all.coverIds.map((id) => [id, now]))
       lastExportAt.value = exportedAt ?? null
       reminderSnoozedUntil.value = snoozedUntil ?? 0
-      if (savedOrder === 'alphabetical' || savedOrder === 'recent') sortOrder.value = savedOrder
+      if (savedOrder && SORT_ORDERS.includes(savedOrder)) sortOrder.value = savedOrder
       loadError.value = null
     } catch (error) {
       console.error(error)
