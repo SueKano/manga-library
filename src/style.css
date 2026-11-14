@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --color-bg: #f6f6f8;
+  --color-surface: #ffffff;
+  --color-surface-2: #ececf1;
+  --color-line: #dcdce4;
+  --color-ink: #17171c;
+  --color-muted: #5d5d6b;
+  /* accent: button backgrounds (white text on top); accent-text: text on the app background */
+  --color-accent: #e11d48;
+  --color-accent-text: #be123c;
+  --color-accent-soft: #ffe4e9;
+  --color-warn: #92400e;
+  --color-warn-soft: #fef3c7;
+  --color-ok: #15803d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0f0f12;
+    --color-surface: #1a1a20;
+    --color-surface-2: #26262e;
+    --color-line: #34343f;
+    --color-ink: #f2f2f5;
+    --color-muted: #a3a3b2;
+    --color-accent-text: #fb7185;
+    --color-accent-soft: #3b1420;
+    --color-warn: #fcd34d;
+    --color-warn-soft: #3a2a08;
+    --color-ok: #4ade80;
+  }
+}
+
+html {
+  color-scheme: light dark;
+  /* Keep focused elements clear of the sticky header and the bottom bar. */
+  scroll-padding: 4.5rem 0 calc(5rem + env(safe-area-inset-bottom));
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overscroll-behavior-y: none;
+}
+
+@layer components {
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-4 text-base font-semibold select-none active:opacity-80 disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-accent text-white;
+  }
+  .btn-secondary {
+    @apply bg-surface-2 text-ink;
+  }
+  .btn-ghost {
+    @apply text-accent-text;
+  }
+  .btn-icon {
+    @apply inline-flex size-12 shrink-0 items-center justify-center rounded-full text-ink active:bg-surface-2;
+  }
+  .input {
+    @apply min-h-12 w-full rounded-xl border border-line bg-surface px-3 text-base text-ink placeholder:text-muted;
+  }
+  .label {
+    @apply mb-1 block text-sm font-medium text-muted;
+  }
+  /* Volume grid cell (series detail). One modifier per state, see `volumeState`. */
+  .volume-cell {
+    @apply flex aspect-square min-h-12 w-full items-center justify-center rounded-xl border-2 text-lg font-bold transition-colors select-none active:opacity-80;
+  }
+  .volume-cell-owned {
+    @apply border-accent bg-accent text-white;
+  }
+  .volume-cell-next {
+    @apply border-dashed border-accent-text bg-surface text-accent-text;
+  }
+  .volume-cell-gap {
+    @apply border-dashed border-warn bg-warn-soft text-warn;
+  }
+  .volume-cell-pending {
+    @apply border-line bg-surface text-muted;
+  }
+  .card {
+    @apply rounded-2xl border border-line bg-surface;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-text);
+  outline-offset: 2px;
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

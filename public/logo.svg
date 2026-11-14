@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#e11d48"/>
+  <!-- Three volumes on a shelf; the last one is the "next" gap. -->
+  <rect x="136" y="150" width="64" height="212" rx="8" fill="#fff"/>
+  <rect x="216" y="150" width="64" height="212" rx="8" fill="#fff"/>
+  <rect x="296" y="150" width="64" height="212" rx="8" fill="none" stroke="#fff" stroke-width="12" stroke-dasharray="22 14"/>
+  <rect x="150" y="176" width="36" height="10" rx="5" fill="#e11d48"/>
+  <rect x="230" y="176" width="36" height="10" rx="5" fill="#e11d48"/>
+  <rect x="120" y="366" width="272" height="14" rx="7" fill="#fff"/>
+</svg>
